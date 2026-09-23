@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Group Chat | Orbital Command Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Cosmic Deep Space Background */
+        body {
+            background-color: #02040a;
+            color: #e2e8f0;
+            font-family: 'ui-monospace', 'SFMono-Regular', monospace;
+            overflow-x: hidden;
+        }
+
+        /* Nebula Glows */
+        .nebula-glow-1 {
+            position: fixed;
+            top: -10%;
+            left: 15%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, rgba(147, 51, 234, 0.03) 50%, transparent 80%);
+            z-index: -2;
+            pointer-events: none;
+            filter: blur(80px);
+        }
+
+        .nebula-glow-2 {
+            position: fixed;
+            bottom: -10%O;
+            right: 10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, rgba(59, 130, 246, 0.02) 50%, transparent 70%);
+            z-index: -2;
+            pointer-events: none;
+            filter: blur(90px);
+        }
+
+        /* Starfield Grid Pattern */
+        .star-grid {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+
+        /* Glassmorphism Space Panels */
+        .space-panel {
+            background: rgba(10, 15, 30, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .space-panel-active {
+            border-color: rgba(56, 189, 248, 0.6);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(56, 189, 248, 0.2);
+        }
+
+        /* Pulse Animations */
+        @keyframes radar-pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.8)); }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .radar-dot {
+            animation: radar-pulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="star-grid min-h-screen flex flex-col justify-between">
+
+    <!-- Cosmic Background Layers -->
+    <div class="nebula-glow-1"></div>
+    <div class="nebula-glow-2"></div>
+
+    <!-- Orbital Telemetry Header -->
+    <header class="border-b border-sky-900/40 bg-sky-950/20 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-3 h-3 bg-sky-400 rounded-full radar-dot"></div>
+                <h1 class="text-sm font-bold tracking-widest text-white uppercase">
+                    AI_GROUP_CHAT <span class="text-xs text-sky-400 font-normal px-2 py-0.5 border border-sky-500/30 rounded bg-sky-950/50">ORBITAL_HUB v3.0</span>
+                </h1>
+            </div>
+            <div class="flex items-center space-x-6 text-[11px] text-sky-300/80 font-mono">
+                <span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> TELEMETRY: NOMINAL</span>
+                <span>[LOCAL_VRAM: 8GB_READY]</span>
+                <a href="https://github.com" target="_blank" class="text-sky-400 hover:text-white transition-colors">GITHUB ↗</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Command Interface -->
+    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 w-full my-auto">
+        
+        <!-- Left Sector: Prompt Navigation & Search (Cols 1-7) -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Search & Sector Filters -->
+            <div class="space-y-3">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-sky-500 font-bold">˃</span>
+                    <input type="text" id="searchInput" placeholder="scan stellar prompts, tags, neural vectors..." 
+                        class="w-full space-panel rounded-xl pl-9 pr-4 py-3 text-xs text-sky-100 placeholder-sky-600 focus:outline-none focus:border-sky-400 transition-colors">
+                </div>
+                <div class="flex flex-wrap gap-2 text-xs">
+                    <button onclick="filterCategory('all')" class="cat-btn px-3 py-1.5 bg-sky-500 text-slate-950 font-bold rounded-lg transition-all shadow-[0_0_12px_rgba(56,189,248,0.3)]">#all_sectors</button>
+                    <button onclick="filterCategory('json')" class="cat-btn px-3 py-1.5 space-panel text-sky-400 hover:text-white rounded-lg transition-all">#json_parsers</button>
+                    <button onclick="filterCategory('creator')" class="cat-btn px-3 py-1.5 space-panel text-sky-400 hover:text-white rounded-lg transition-all">#creators</button>
+                    <button onclick="filterCategory('local')" class="cat-btn px-3 py-1.5 space-panel text-sky-400 hover:text-white rounded-lg transition-all">#ollama_local</button>
+                </div>
+            </div>
+
+            <!-- Prompt Card Matrix -->
+            <div id="promptList" class="space-y-3.5">
+                <!-- Populated dynamically by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Right Sector: Interactive Playground & Export Engine (Cols 8-12) -->
+        <div class="lg:col-span-5 space-y-6">
+            <div class="sticky top-20 space-panel rounded-2xl p-5 shadow-2xl space-y-5">
+                <div class="flex justify-between items-center border-b border-sky-900/40 pb-3">
+                    <h2 class="text-xs font-bold text-sky-400 flex items-center gap-2 tracking-wider">
+                        <span>✦</span> PAYLOAD PLAYGROUND
+                    </h2>
+                    <span id="activePromptTitle" class="text-[11px] text-sky-500 font-mono truncate max-w-[180px]">No payload loaded</span>
+                </div>
+
+                <!-- Variable Interpolation Inputs -->
+                <div id="variableInputsArea" class="space-y-3 text-xs">
+                    <p class="text-sky-600/80 italic text-center py-6">// Select a prompt vector from the left sector to calibrate variables.</p>
+                </div>
+
+                <!-- Code Export Terminal -->
+                <div class="space-y-2 pt-2 border-t border-sky-900/40">
+                    <div class="flex space-x-2 text-[11px] border-b border-sky-900/40 pb-2">
+                        <button onclick="switchTab('raw')" id="tab-raw" class="tab-btn px-3 py-1 bg-sky-950 border border-sky-800 text-sky-200 rounded font-medium">Raw Payload</button>
+                        <button onclick="switchTab('python')" id="tab-python" class="tab-btn px-3 py-1 text-sky-500 hover:text-sky-300 rounded">Python (Ollama)</button>
+                        <button onclick="switchTab('curl')" id="tab-curl" class="tab-btn px-3 py-1 text-sky-500 hover:text-sky-300 rounded">cURL Stream</button>
+                    </div>
+
+                    <!-- Code Output Display -->
+                    <div class="relative">
+                        <pre id="codeOutput" class="bg-black/80 border border-sky-950 rounded-xl p-3.5 text-[11px] text-sky-300 overflow-x-auto h-44 whitespace-pre-wrap font-mono">// Awaiting telemetry input...</pre>
+                        <button onclick="copyOutput()" class="absolute top-2.5 right-2.5 bg-sky-950/80 hover:bg-sky-900 text-sky-300 border border-sky-800 text-[10px] px-2.5 py-1 rounded transition-colors">COPY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Orbital Footer Telemetry -->
+    <footer class="border-t border-sky-900/40 bg-sky-950/10 py-4 mt-12 text-center text-[10px] text-sky-600 font-mono">
+        <p>AI GROUP CHAT ORBITAL COMMAND · ZERO-BACKEND CLIENT-SIDE EXECUTION · SECURE SEC-NODE 2026</p>
+    </footer>
+
+    <!-- JavaScript Execution Logic -->
+    <script>
+        const prompts = [
+            {
+                id: 1,
+                title: "Strict JSON Schema Enforcer",
+                category: "json",
+                tags: ["json", "ollama", "strict-output"],
+                vram: "8GB VRAM",
+                compliance: "98% Compliance",
+                template: "You are an automated data extraction engine running on local hardware. Parse the following target text and return ONLY a valid JSON object matching this schema: { \"summary\": string, \"entities\": [string], \"sentiment\": \"positive\"|\"neutral\"|\"negative\" }. Do not output markdown code blocks or conversational text.\n\nTarget Text:\n{{target_text}}",
+                variables: { target_text: "Deep space telemetry recorded a 15% surge in quantum throughput across local cluster nodes." }
+            },
+            {
+                id: 2,
+                title: "9:16 Short-Form Hook Engineer",
+                category: "creator",
+                tags: ["creators", "retention", "scripts"],
+                vram: "6GB VRAM",
+                compliance: "95% Compliance",
+                template: "Act as an expert short-form video retention strategist. Generate 3 high-converting hook variations for a vertical video about {{topic}}. The hooks must target the {{target_audience}} demographic, utilizing curiosity loops and zero fluff.\n\nKey constraint: Under 7 seconds spoken duration.",
+                variables: { topic: "building local AI terminals", target_audience: "software engineers and digital creators" }
+            },
+            {
+                id: 3,
+                title: "Local LLM System Persona Tuner",
+                category: "local",
+                tags: ["ollama", "persona", "system-prompt"],
+                vram: "4GB VRAM",
+                compliance: "99% Compliance",
+                template: "You operate as {{persona_name}}, a specialized technical advisor. Your communication style is {{communication_style}}. Answer all incoming technical queries with absolute precision, avoiding corporate pleasantries or filler words.",
+                variables: { persona_name: "Orbital Station Systems Architect", communication_style: "clinical, highly technical, and direct" }
+            }
+        ];
+
+        let selectedPrompt = prompts[0];
+        let currentTab = 'raw';
+        let currentValues = {};
+
+        function renderPrompts(filter = 'all', search = '') {
+            const listEl = document.getElementById('promptList');
+            listEl.innerHTML = '';
+
+            const filtered = prompts.filter(p => {
+                const matchesCat = filter === 'all' || p.category === filter;
+                const matchesSearch = p.title.toLowerCase().includes(search.toLowerCase()) || p.tags.some(t => t.includes(search));
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                listEl.innerHTML = `<p class="text-sky-600 text-xs text-center py-8">// No stellar prompt vectors found matching criteria.</p>`;
+                return;
+            }
+
+            filtered.forEach(p => {
+                const isSelected = selectedPrompt.id === p.id;
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl transition-all cursor-pointer space-panel ${isSelected ? 'space-panel-active' : 'hover:border-sky-500/40'}`;
+                card.onclick = () => selectPrompt(p.id);
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xs font-bold text-white tracking-wide">${p.title}</h3>
+                        <div class="flex gap-1.5 text-[10px]">
+                            <span class="px-2 py-0.5 bg-sky-950/80 border border-sky-900/60 text-sky-300 rounded">${p.vram}</span>
+                            <span class="px-2 py-0.5 bg-emerald-950/60 text-emerald-400 border border-emerald-900/50 rounded">${p.compliance}</span>
+                        </div>
+                    </div>
+                    <p class="text-[11px] text-sky-400/70 line-clamp-2 mb-3 font-sans">${p.template}</p>
+                    <div class="flex flex-wrap gap-1.5">
+                        ${p.tags.map(t => `<span class="text-[10px] text-sky-500/80 bg-black/40 border border-sky-950 px-2 py-0.5 rounded">#${t}</span>`).join('')}
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        function selectPrompt(id) {
+            selectedPrompt = prompts.find(p => p.id === id);
+            currentValues = { ...selectedPrompt.variables };
+            document.getElementById('activePromptTitle').innerText = selectedPrompt.title;
+            renderPrompts(currentFilter, document.getElementById('searchInput').value);
+            renderPlayground();
+        }
+
+        function renderPlayground() {
+            const area = document.getElementById('variableInputsArea');
+            area.innerHTML = '';
+
+            const keys = Object.keys(selectedPrompt.variables);
+            if (keys.length === 0) {
+                area.innerHTML = `<p class="text-sky-600 italic">No variables required for this prompt vector.</p>`;
+            } else {
+                keys.forEach(key => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'space-y-1';
+                    wrapper.innerHTML = `
+                        <label class="text-sky-400 block font-semibold text-[11px]">var: {{${key}}}</label>
+                        <input type="text" value="${currentValues[key]}" oninput="updateVariable('${key}', this.value)"
+                            class="w-full bg-black/60 border border-sky-900/60 rounded px-3 py-2 text-xs text-sky-200 focus:outline-none focus:border-sky-400">
+                    `;
+                    area.appendChild(wrapper);
+                });
+            }
+            updateOutput();
+        }
+
+        function updateVariable(key, val) {
+            currentValues[key] = val;
+            updateOutput();
+        }
+
+        function getCompiledPrompt() {
+            let text = selectedPrompt.template;
+            for (const [key, val] of Object.entries(currentValues)) {
+                text = text.replace(new RegExp(`{{${key}}}`, 'g'), val);
+            }
+            return text;
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.className = "tab-btn px-3 py-1 text-sky-500 hover:text-sky-300 rounded";
+            });
+            document.getElementById(`tab-${tab}`).className = "tab-btn px-3 py-1 bg-sky-950 border border-sky-800 text-sky-200 rounded font-medium";
+            updateOutput();
+        }
+
+        function updateOutput() {
+            const compiled = getCompiledPrompt();
+            const outputEl = document.getElementById('codeOutput');
+
+            if (currentTab === 'raw') {
+                outputEl.innerText = compiled;
+            } else if (currentTab === 'python') {
+                outputEl.innerText = `import requests\n\nresponse = requests.post('http://localhost:11434/api/generate', json={\n    "model": "llama3",\n    "prompt": ${JSON.stringify(compiled)},\n    "stream": False\n})\nprint(response.json()['response'])`;
+            } else if (currentTab === 'curl') {
+                outputEl.innerText = `curl http://localhost:11434/api/generate -d '{\n  "model": "llama3",\n  "prompt": ${JSON.stringify(compiled)}\n}'`;
+            }
+        }
+
+        function copyOutput() {
+            const text = document.getElementById('codeOutput').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Payload copied to clipboard.");
+        }
+
+        let currentFilter = 'all';
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.className = "cat-btn px-3 py-1.5 space-panel text-sky-400 hover:text-white rounded-lg transition-all";
+            });
+            event.target.className = "cat-btn px-3 py-1.5 bg-sky-500 text-slate-950 font-bold rounded-lg transition-all shadow-[0_0_12px_rgba(56,189,248,0.3)]";
+            renderPrompts(cat, document.getElementById('searchInput').value);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderPrompts(currentFilter, e.target.value);
+        });
+
+        selectPrompt(1);
+    </script>
+</body>
+</html>
